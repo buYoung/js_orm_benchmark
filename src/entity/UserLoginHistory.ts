@@ -5,7 +5,6 @@ import {
     JoinColumn,
     ManyToOne,
 } from 'typeorm';
-import { OneToMany } from '@mikro-orm/core';
 import { User } from 'src/entity/User';
 
 @Entity()
@@ -28,6 +27,6 @@ export class UserLoginHistory {
     @Column('timestamp')
     lastLogin: Date;
 
-    @OneToMany(() => User, (user) => user.userLoginHistory)
+    @ManyToOne(() => User, (user) => user.userLoginHistory)
     user: User;
 }

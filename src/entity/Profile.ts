@@ -1,10 +1,7 @@
 import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
+    Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne
 } from 'typeorm';
 import { User } from 'src/entity/User';
-import { OneToOne } from '@mikro-orm/core';
 
 @Entity()
 export class Profile {

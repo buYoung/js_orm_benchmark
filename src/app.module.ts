@@ -12,7 +12,8 @@ import { File } from 'src/entity/File';
 import { FileInfo } from 'src/entity/FileInfo';
 import { Contact } from 'src/entity/Contact';
 import { Comment } from 'src/entity/Comment';
-import { UserModule } from './user/user.module';
+import { TypeORMModule } from 'src/typeORM/typeORM.Module';
+import { TypeORMLogger } from 'src/typeORM.logger';
 
 @Module({
     imports: [
@@ -23,6 +24,8 @@ import { UserModule } from './user/user.module';
             username: 'admin',
             password: 'admin1234',
             database: 'orm_benchMark',
+            // logger: new TypeORMLogger,
+            logging: false,
             entities: [
                 User,
                 UserLoginHistory,
@@ -38,7 +41,7 @@ import { UserModule } from './user/user.module';
             autoLoadEntities: true,
             synchronize: true,
         }),
-        UserModule,
+        TypeORMModule,
     ],
     controllers: [AppController],
     providers: [AppService],

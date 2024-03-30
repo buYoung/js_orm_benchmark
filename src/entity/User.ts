@@ -1,12 +1,7 @@
 import {
-    Column,
-    Entity,
-    JoinTable,
-    ManyToOne,
-    PrimaryGeneratedColumn,
+    Column, Entity, Index, JoinColumn, JoinTable, ManyToOne, PrimaryGeneratedColumn, ManyToMany, OneToMany, OneToOne
 } from 'typeorm';
 import { Profile } from 'src/entity/Profile';
-import { Cascade, ManyToMany, OneToMany, OneToOne } from '@mikro-orm/core';
 import { Contact } from 'src/entity/Contact';
 import { UserLoginHistory } from 'src/entity/UserLoginHistory';
 import { UserRole } from 'src/entity/UserRole';
@@ -32,26 +27,29 @@ export class User {
     email: string;
 
     @OneToOne(() => Profile, (profile) => profile.user)
+    @JoinColumn()
     profile: Profile;
 
-    @ManyToOne(() => UserPreferences, (userPreferences) => userPreferences.user)
-    userPreferences: UserPreferences[];
+    @OneToOne(() => UserPreferences, (userPreferences) => userPreferences.user)
+    @JoinColumn()
+    userPreferences: UserPreferences;
 
-    @ManyToOne(() => Project, (project) => project.user)
+    @OneToMany(() => Project, (project) => project.user)
     projects: Project[];
 
-    @ManyToOne(() => Contact, (contact) => contact.user)
+    @OneToMany(() => Contact, (contact) => contact.user)
     contacts: Contact[];
 
-    @ManyToOne(
+    @OneToMany(
         () => UserLoginHistory,
         (userLoginHistory) => userLoginHistory.user,
     )
     userLoginHistory: UserLoginHistory[];
 
-    @ManyToOne(() => Comment, (comment) => comment.user)
+    @OneToMany(() => Comment, (comment) => comment.user)
     comments: Comment[];
 
-    @ManyToOne(() => UserRole, (userRole) => userRole.users)
-    userRoles: UserRole;
+    @ManyToMany(() => UserRole, (userRole) => userRole.users)
+    @JoinTable()
+    userRoles: UserRole[];
 }

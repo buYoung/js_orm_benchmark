@@ -2,10 +2,9 @@ import {
     Entity,
     PrimaryGeneratedColumn,
     Column,
-    JoinColumn,
     ManyToOne,
+    OneToMany
 } from 'typeorm';
-import { OneToMany, OneToOne } from '@mikro-orm/core';
 import { User } from 'src/entity/User';
 import { File } from 'src/entity/File';
 
@@ -26,7 +25,7 @@ export class Comment {
     @Column('timestamp', { nullable: true })
     deletedAt?: Date | null;
 
-    @OneToMany(() => User, (user) => user.comments)
+    @ManyToOne(() => User, (user) => user.comments)
     user: User;
 
     @OneToMany(() => File, (file) => file.comments)

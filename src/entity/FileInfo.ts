@@ -2,10 +2,8 @@ import {
     Entity,
     PrimaryGeneratedColumn,
     Column,
-    JoinColumn,
     ManyToOne,
 } from 'typeorm';
-import { OneToOne } from '@mikro-orm/core';
 import { File } from 'src/entity/File';
 
 @Entity()

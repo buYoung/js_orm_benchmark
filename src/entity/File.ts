@@ -4,8 +4,8 @@ import {
     Column,
     JoinColumn,
     ManyToOne,
+    OneToMany,
 } from 'typeorm';
-import { OneToMany, OneToOne } from '@mikro-orm/core';
 import { Comment } from 'src/entity/Comment';
 import { FileInfo } from 'src/entity/FileInfo';
 

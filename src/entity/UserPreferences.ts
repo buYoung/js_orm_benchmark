@@ -1,6 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
 import { User } from 'src/entity/User';
-import { OneToMany, OneToOne } from '@mikro-orm/core';
 
 @Entity()
 export class UserPreferences {
@@ -16,6 +15,6 @@ export class UserPreferences {
     @Column()
     timezone: string;
 
-    @OneToMany(() => User, (user) => user.userPreferences)
+    @OneToOne(() => User, (user) => user.userPreferences)
     user: User;
 }

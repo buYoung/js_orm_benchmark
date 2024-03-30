@@ -1,19 +1,9 @@
-import {
-    Controller,
-    Get,
-    Post,
-    Body,
-    Patch,
-    Param,
-    Delete,
-} from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { Controller, Get, Param } from '@nestjs/common';
+import { TypeORMService } from 'src/typeORM/typeORM.service';
 
-@Controller('user')
-export class UserController {
-    constructor(private readonly userService: UserService) {}
+@Controller('typeORM')
+export class TypeORMController {
+    constructor(private readonly userService: TypeORMService) {}
 
     @Get('test')
     test() {
@@ -21,33 +11,33 @@ export class UserController {
     }
 
     @Get('/findAllGetMany')
-    findAllGetMany() {
+    async findAllGetMany() {
         console.time('findAllGetMany');
-        const result = this.userService.findAllGetMany();
+        const result = await this.userService.findAllGetMany();
         console.timeEnd('findAllGetMany');
         return result;
     }
 
     @Get('/findAllGetManyAndCount')
-    findAllGetManyAndCount() {
+    async findAllGetManyAndCount() {
         console.time('findAllGetManyAndCount');
-        const result = this.userService.findAllGetManyAndCount();
+        const result = await this.userService.findAllGetManyAndCount();
         console.timeEnd('findAllGetManyAndCount');
         return result;
     }
 
     @Get('/findAllGetManyPaginate')
-    findAllGetManyPaginate() {
+    async findAllGetManyPaginate() {
         console.time('findAllGetManyPaginate');
-        const result = this.userService.findAllGetManyPaginate();
+        const result = await this.userService.findAllGetManyPaginate();
         console.timeEnd('findAllGetManyPaginate');
         return result;
     }
 
     @Get('/findAllGetManyAndCountPaginate')
-    findAllGetManyAndCountPaginate() {
+    async findAllGetManyAndCountPaginate() {
         console.time('findAllGetManyAndCountPaginate');
-        const result = this.userService.findAllGetManyAndCountPaginate();
+        const result = await this.userService.findAllGetManyAndCountPaginate();
         console.timeEnd('findAllGetManyAndCountPaginate');
         return result;
     }

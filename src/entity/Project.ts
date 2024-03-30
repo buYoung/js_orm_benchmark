@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { ManyToMany, OneToMany } from '@mikro-orm/core';
 import { User } from 'src/entity/User';
 
 @Entity()
@@ -19,6 +18,6 @@ export class Project {
     @Column('timestamp')
     projectEndDate: Date;
 
-    @OneToMany(() => User, (user) => user.projects)
+    @ManyToOne(() => User, (user) => user.projects)
     user: User;
 }

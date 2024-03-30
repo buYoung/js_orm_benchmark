@@ -1,5 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinTable } from 'typeorm';
-import { OneToMany } from '@mikro-orm/core';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
 import { User } from 'src/entity/User';
 
 @Entity()
@@ -10,6 +9,6 @@ export class UserRole {
     @Column()
     roleName: string;
 
-    @OneToMany(() => User, (user) => user.userRoles)
+    @ManyToMany(() => User, (user) => user.userRoles)
     users: User[];
 }

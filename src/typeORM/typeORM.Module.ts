@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { UserService } from './user.service';
-import { UserController } from './user.controller';
+import { TypeORMService } from 'src/typeORM/typeORM.service';
+import { TypeORMController } from 'src/typeORM/typeORM.Controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/entity/User';
 import { UserLoginHistory } from 'src/entity/UserLoginHistory';
@@ -28,7 +28,7 @@ import { Comment } from 'src/entity/Comment';
             Comment,
         ]),
     ],
-    controllers: [UserController],
-    providers: [UserService],
+    controllers: [TypeORMController],
+    providers: [TypeORMService],
 })
-export class UserModule {}
+export class TypeORMModule {}

@@ -17,7 +17,7 @@ import { DataSource } from 'typeorm/data-source/DataSource';
 import { faker } from '@faker-js/faker';
 
 @Injectable()
-export class UserService {
+export class TypeORMService {
     constructor(
         @InjectRepository(User)
         private userRepository: Repository<User>,
@@ -43,17 +43,29 @@ export class UserService {
     ) {}
 
     async findAllGetMany() {
-        return await this.userRepository
+        return this.userRepository
             .createQueryBuilder('user')
             .leftJoinAndSelect('user.profile', 'profile')
             .leftJoinAndSelect('user.userPreferences', 'userPreferences')
-            .leftJoinAndSelect('user.userRole', 'userRole')
+            .leftJoinAndSelect('user.userRoles', 'userRoles')
             .leftJoinAndSelect('user.contacts', 'contacts')
             .leftJoinAndSelect('user.projects', 'projects')
             .leftJoinAndSelect('user.userLoginHistory', 'userLoginHistory')
             .leftJoinAndSelect('user.comments', 'comments')
             .leftJoinAndSelect('comments.file', 'file')
             .leftJoinAndSelect('file.fileInfo', 'fileInfo')
+            .select([
+                'user.id',
+                'profile.id',
+                'userPreferences.id',
+                'userRoles.id',
+                'contacts.id',
+                'projects.id',
+                'userLoginHistory.id',
+                'comments.id',
+                'file.id',
+                'fileInfo.id',
+            ])
             .getMany();
     }
 
@@ -62,13 +74,25 @@ export class UserService {
             .createQueryBuilder('user')
             .leftJoinAndSelect('user.profile', 'profile')
             .leftJoinAndSelect('user.userPreferences', 'userPreferences')
-            .leftJoinAndSelect('user.userRole', 'userRole')
+            .leftJoinAndSelect('user.userRoles', 'userRoles')
             .leftJoinAndSelect('user.contacts', 'contacts')
             .leftJoinAndSelect('user.projects', 'projects')
             .leftJoinAndSelect('user.userLoginHistory', 'userLoginHistory')
             .leftJoinAndSelect('user.comments', 'comments')
             .leftJoinAndSelect('comments.file', 'file')
             .leftJoinAndSelect('file.fileInfo', 'fileInfo')
+            .select([
+                'user.id',
+                'profile.id',
+                'userPreferences.id',
+                'userRoles.id',
+                'contacts.id',
+                'projects.id',
+                'userLoginHistory.id',
+                'comments.id',
+                'file.id',
+                'fileInfo.id',
+            ])
             .getManyAndCount();
     }
 
@@ -77,13 +101,25 @@ export class UserService {
             .createQueryBuilder('user')
             .leftJoinAndSelect('user.profile', 'profile')
             .leftJoinAndSelect('user.userPreferences', 'userPreferences')
-            .leftJoinAndSelect('user.userRole', 'userRole')
+            .leftJoinAndSelect('user.userRoles', 'userRoles')
             .leftJoinAndSelect('user.contacts', 'contacts')
             .leftJoinAndSelect('user.projects', 'projects')
             .leftJoinAndSelect('user.userLoginHistory', 'userLoginHistory')
             .leftJoinAndSelect('user.comments', 'comments')
             .leftJoinAndSelect('comments.file', 'file')
             .leftJoinAndSelect('file.fileInfo', 'fileInfo')
+            .select([
+                'user.id',
+                'profile.id',
+                'userPreferences.id',
+                'userRoles.id',
+                'contacts.id',
+                'projects.id',
+                'userLoginHistory.id',
+                'comments.id',
+                'file.id',
+                'fileInfo.id',
+            ])
             .skip(0)
             .take(1000)
             .getMany();
@@ -94,13 +130,25 @@ export class UserService {
             .createQueryBuilder('user')
             .leftJoinAndSelect('user.profile', 'profile')
             .leftJoinAndSelect('user.userPreferences', 'userPreferences')
-            .leftJoinAndSelect('user.userRole', 'userRole')
+            .leftJoinAndSelect('user.userRoles', 'userRoles')
             .leftJoinAndSelect('user.contacts', 'contacts')
             .leftJoinAndSelect('user.projects', 'projects')
             .leftJoinAndSelect('user.userLoginHistory', 'userLoginHistory')
             .leftJoinAndSelect('user.comments', 'comments')
             .leftJoinAndSelect('comments.file', 'file')
             .leftJoinAndSelect('file.fileInfo', 'fileInfo')
+            .select([
+                'user.id',
+                'profile.id',
+                'userPreferences.id',
+                'userRoles.id',
+                'contacts.id',
+                'projects.id',
+                'userLoginHistory.id',
+                'comments.id',
+                'file.id',
+                'fileInfo.id',
+            ])
             .skip(0)
             .take(1000)
             .getManyAndCount();
@@ -111,7 +159,11 @@ export class UserService {
     }
 
     async create() {
-        const loopCount = 5;
+        const loopCount = 1000;
+        const queryRunner = this.connection.createQueryRunner()
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+
 
         console.time('create');
         for (let i = 0; i < loopCount; i++) {
@@ -131,7 +183,7 @@ export class UserService {
             });
 
             const contacts = Array.from(
-                { length: faker.number.int({ min: 1, max: 50 }) },
+                { length: 5 },
                 () => {
                     return this.contactRepository.create({
                         phone: faker.phone.number(),
@@ -141,13 +193,13 @@ export class UserService {
             );
 
             const projects = Array.from(
-                { length: faker.number.int({ min: 5, max: 20 }) },
+                { length: 10 },
                 () => {
                     return this.projectRepository.create({
                         projectName: faker.company.name(),
                         projectDescription: faker.company.catchPhrase(),
                         projectStartDate: dayjs(
-                            faker.date.past().getUTCDate(),
+                            faker.date.anytime().getUTCDate(),
                         ).toDate(),
                         projectEndDate: dayjs(
                             faker.date.future().getUTCDate(),
@@ -157,7 +209,7 @@ export class UserService {
             );
 
             const loginHistory = Array.from(
-                { length: faker.number.int({ min: 1, max: 100 }) },
+                { length: 5 },
                 () => {
                     return this.userLoginHistoryRepository.create({
                         firstName: faker.person.firstName(),
@@ -165,7 +217,7 @@ export class UserService {
                         age: faker.number.int(100),
                         email: faker.internet.email(),
                         lastLogin: dayjs(
-                            faker.date.past().getUTCDate(),
+                            faker.date.anytime().getUTCDate(),
                         ).toDate(),
                     });
                 },
@@ -183,19 +235,19 @@ export class UserService {
             const file = this.fileRepository.create({
                 fileName: faker.system.fileName(),
                 fileType: faker.system.fileType(),
-                uploadedAt: dayjs(faker.date.past().getUTCDate()).toDate(),
+                uploadedAt: dayjs(faker.date.anytime().getUTCDate()).toDate(),
             });
 
             const comment = Array.from(
-                { length: faker.number.int({ min: 1, max: 100 }) },
+                { length: 15 },
                 () => {
                     return this.commentRepository.create({
                         comment: faker.lorem.sentence(),
                         createdAt: dayjs(
-                            faker.date.past().getUTCDate(),
+                            faker.date.anytime().getUTCDate(),
                         ).toDate(),
                         updatedAt: dayjs(
-                            faker.date.past().getUTCDate(),
+                            faker.date.anytime().getUTCDate(),
                         ).toDate(),
                     });
                 },
@@ -209,35 +261,47 @@ export class UserService {
             });
 
             await Promise.all([
-                this.profileRepository.save(profile),
-                this.userPreferencesRepository.save(userPreferences),
-                this.userRoleRepository.save(userRole),
-                this.contactRepository.save(contacts),
-                this.projectRepository.save(projects),
-                this.userLoginHistoryRepository.save(loginHistory),
+                queryRunner.manager.save(profile),
+                queryRunner.manager.save(userPreferences),
             ]);
 
-            console.log('fileInfo', fileInfo);
+            User.profile = profile;
+            User.userPreferences = userPreferences;
+
+            await queryRunner.manager.save(User);
+
+            userRole.users = [User];
+            contacts.some((c) => {
+                c.user = User;
+            });
+            projects.some((p) => {
+                p.user = User;
+            });
+            loginHistory.some((l) => {
+                l.user = User;
+            });
+            comment.some((c) => {
+                c.user = User;
+            });
+
+            await Promise.all([
+                queryRunner.manager.save(userRole),
+                queryRunner.manager.save(contacts),
+                queryRunner.manager.save(projects),
+                queryRunner.manager.save(loginHistory),
+            ]);
 
             for (const c of comment) {
-                await this.commentRepository.save(c);
+                await queryRunner.manager.save(c);
                 file.comments = c;
-                await this.fileRepository.save(file);
-                await this.fileInfoRepository.save(fileInfo);
+                await queryRunner.manager.save(file);
+                await queryRunner.manager.save(fileInfo);
                 fileInfo.file = file;
             }
-
-            User.profile = profile;
-            User.userPreferences = [userPreferences];
-            User.userRoles = userRole;
-            User.contacts = contacts;
-            User.projects = projects;
-            User.userLoginHistory = loginHistory;
-            User.comments = comment;
-
-            await this.userRepository.save(User);
         }
         console.timeEnd('create');
+        await queryRunner.commitTransaction();
+        await queryRunner.release();
         return `This action create a user`;
     }
 }
