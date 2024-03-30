@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import dayjs from 'dayjs';
 
 import { User } from 'src/entity/User';
@@ -97,8 +97,12 @@ export class TypeORMService {
     }
 
     async findAllGetManyPaginate() {
-        return await this.userRepository
+        const qb =  this.userRepository
             .createQueryBuilder('user')
+            .setFindOptions({
+                relationLoadStrategy: 'query',
+            });
+        return qb
             .leftJoinAndSelect('user.profile', 'profile')
             .leftJoinAndSelect('user.userPreferences', 'userPreferences')
             .leftJoinAndSelect('user.userRoles', 'userRoles')
@@ -121,37 +125,88 @@ export class TypeORMService {
                 'fileInfo.id',
             ])
             .skip(0)
-            .take(1000)
+            .take(100)
             .getMany();
     }
 
     async findAllGetManyAndCountPaginate() {
-        return await this.userRepository
-            .createQueryBuilder('user')
-            .leftJoinAndSelect('user.profile', 'profile')
-            .leftJoinAndSelect('user.userPreferences', 'userPreferences')
-            .leftJoinAndSelect('user.userRoles', 'userRoles')
-            .leftJoinAndSelect('user.contacts', 'contacts')
-            .leftJoinAndSelect('user.projects', 'projects')
-            .leftJoinAndSelect('user.userLoginHistory', 'userLoginHistory')
-            .leftJoinAndSelect('user.comments', 'comments')
-            .leftJoinAndSelect('comments.file', 'file')
-            .leftJoinAndSelect('file.fileInfo', 'fileInfo')
-            .select([
-                'user.id',
-                'profile.id',
-                'userPreferences.id',
-                'userRoles.id',
-                'contacts.id',
-                'projects.id',
-                'userLoginHistory.id',
-                'comments.id',
-                'file.id',
-                'fileInfo.id',
-            ])
-            .skip(0)
-            .take(1000)
-            .getManyAndCount();
+        // this.userRepository
+        //             .createQueryBuilder('user')
+        //             .leftJoinAndSelect('user.profile', 'profile')
+        //             .leftJoinAndSelect('user.userPreferences', 'userPreferences')
+        //             .leftJoinAndSelect('user.userRoles', 'userRoles')
+        //             .leftJoinAndSelect('user.contacts', 'contacts')
+        //             .leftJoinAndSelect('user.projects', 'projects')
+        //             .leftJoinAndSelect('user.userLoginHistory', 'userLoginHistory')
+        //             .leftJoinAndSelect('user.comments', 'comments')
+        //             .leftJoinAndSelect('comments.file', 'file')
+        //             .leftJoinAndSelect('file.fileInfo', 'fileInfo')
+        //             .select([
+        //                 'user.id',
+        //                 'profile.id',
+        //                 'userPreferences.id',
+        //                 'userRoles.id',
+        //                 'contacts.id',
+        //                 'projects.id',
+        //                 'userLoginHistory.id',
+        //                 'comments.id',
+        //                 'file.id',
+        //                 'fileInfo.id',
+        //             ])
+        //             .skip(0)
+        //             .take(100)
+        //             .getManyAndCount();
+        return this.userRepository.findAndCount({
+            relations: {
+                profile: true,
+                userPreferences: true,
+                userRoles: true,
+                contacts: true,
+                projects: true,
+                userLoginHistory: true,
+                comments: {
+                    file: {
+                        fileInfo: true,
+                    },
+                }
+            },
+            select: {
+                id: true,
+                profile: {
+                    id: true,
+                },
+                userPreferences: {
+                    id: true,
+                },
+                userRoles: {
+                    id: true,
+                },
+                contacts: {
+                    id: true,
+                },
+                projects: {
+                    id: true,
+                },
+                userLoginHistory: {
+                    id: true,
+                },
+                comments: {
+                    id: true,
+                    file: {
+                        id: true,
+                        fileInfo: {
+                            id: true,
+                        },
+                    },
+                },
+            },
+            skip: 0,
+            take: 100,
+            relationLoadStrategy: 'query',
+            where: {
+                id: In(Array.from({ length: 1000 }, (_, i) => 1993 + i + 1)),
+            }
+        })
     }
 
     findOne(id: number) {
