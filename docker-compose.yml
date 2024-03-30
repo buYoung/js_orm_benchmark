@@ -1,0 +1,34 @@
+version: "3.7"
+
+services:
+        postgres:
+            image: postgres:16.2-alpine3.19
+            container_name: postgres
+            restart: always
+            deploy:
+                resources:
+                    limits:
+                        cpus: '2'
+                        memory: 4gb
+            ports:
+                - "5432:5432"
+            environment:
+                - POSTGRES_USER=admin
+                - POSTGRES_PASSWORD=admin1234
+                - POSTGRES_DB=orm_benchMark
+
+        mysqlDB:
+            image: mysql:8.2.0
+            container_name: mysqlDBTest
+            restart: always
+            ports:
+                - "3307:3306"
+            environment:
+                - MYSQL_ROOT_PASSWORD=root
+                - MYSQL_DATABASE=orm_benchMark
+                - MYSQL_USER=admin
+                - MYSQL_PASSWORD=admin1234
+
+networks:
+    mongodb-net:
+        driver: bridge
