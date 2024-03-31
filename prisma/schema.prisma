@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://admin:admin1234@localhost:3307/orm_benchMark"
+}
+
+model comment {
+  id        Int       @id @default(autoincrement())
+  comment   String    @db.VarChar(255)
+  createdAt DateTime  @db.Timestamp(0)
+  updatedAt DateTime? @db.Timestamp(0)
+  deletedAt DateTime? @db.Timestamp(0)
+  userId    Int?
+  user      user?     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_c0354a9a009d3bb45a08655ce3b")
+  file      file[]
+
+  @@index([userId], map: "FK_c0354a9a009d3bb45a08655ce3b")
+}
+
+model contact {
+  id      Int    @id @default(autoincrement())
+  phone   String @db.VarChar(255)
+  address String @db.VarChar(255)
+  userId  Int?
+  user    user?  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_e7e34fa8e409e9146f4729fd0cb")
+
+  @@index([userId], map: "FK_e7e34fa8e409e9146f4729fd0cb")
+}
+
+model file {
+  id         Int         @id @default(autoincrement())
+  fileName   String      @db.VarChar(255)
+  fileType   String      @db.VarChar(255)
+  uploadedAt DateTime    @db.Timestamp(0)
+  commentsId Int?
+  comment    comment?    @relation(fields: [commentsId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_79fc5a1619dfb4c00443db05ad7")
+  file_info  file_info[]
+
+  @@index([commentsId], map: "FK_79fc5a1619dfb4c00443db05ad7")
+}
+
+model file_info {
+  id     Int    @id @default(autoincrement())
+  size   Int
+  hash   String @db.VarChar(255)
+  path   String @db.VarChar(255)
+  fileId Int?
+  file   file?  @relation(fields: [fileId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_3fa2a876560fa15272f02e59688")
+
+  @@index([fileId], map: "FK_3fa2a876560fa15272f02e59688")
+}
+
+model profile {
+  id       Int      @id @default(autoincrement())
+  birthday DateTime @db.Timestamp(0)
+  gender   String   @db.VarChar(255)
+  user     user?
+}
+
+model project {
+  id                 Int      @id @default(autoincrement())
+  projectName        String   @db.VarChar(255)
+  projectDescription String   @db.VarChar(255)
+  projectStartDate   DateTime @db.Timestamp(0)
+  projectEndDate     DateTime @db.Timestamp(0)
+  userId             Int?
+  user               user?    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_7c4b0d3b77eaf26f8b4da879e63")
+
+  @@index([userId], map: "FK_7c4b0d3b77eaf26f8b4da879e63")
+}
+
+model user {
+  id                        Int                         @id @default(autoincrement())
+  userId                    String                      @db.VarChar(255)
+  userName                  String                      @db.VarChar(255)
+  age                       Int
+  email                     String                      @db.VarChar(255)
+  profileId                 Int?                        @unique(map: "REL_9466682df91534dd95e4dbaa61")
+  userPreferencesId         Int?                        @unique(map: "REL_c96c093190c5c2c1f94c53dabd")
+  comment                   comment[]
+  contact                   contact[]
+  project                   project[]
+  profile                   profile?                    @relation(fields: [profileId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_9466682df91534dd95e4dbaa616")
+  user_preferences          user_preferences?           @relation(fields: [userPreferencesId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_c96c093190c5c2c1f94c53dabdd")
+  user_login_history        user_login_history[]
+  user_user_roles_user_role user_user_roles_user_role[]
+}
+
+model user_login_history {
+  id        Int      @id @default(autoincrement())
+  firstName String   @db.VarChar(255)
+  lastName  String   @db.VarChar(255)
+  age       Int
+  email     String   @db.VarChar(255)
+  lastLogin DateTime @db.Timestamp(0)
+  userId    Int?
+  user      user?    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_8cd045e34dacf6e82ac34e783b5")
+
+  @@index([userId], map: "FK_8cd045e34dacf6e82ac34e783b5")
+}
+
+model user_preferences {
+  id       Int    @id @default(autoincrement())
+  language String @db.VarChar(255)
+  theme    String @db.VarChar(255)
+  timezone String @db.VarChar(255)
+  user     user?
+}
+
+model user_role {
+  id                        Int                         @id @default(autoincrement())
+  roleName                  String                      @db.VarChar(255)
+  user_user_roles_user_role user_user_roles_user_role[]
+}
+
+model user_user_roles_user_role {
+  userId     Int
+  userRoleId Int
+  user       user      @relation(fields: [userId], references: [id], onDelete: Cascade, map: "FK_7283710ea40464575a32cbbc2b8")
+  user_role  user_role @relation(fields: [userRoleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_dee686d373e92c6414114a1a511")
+
+  @@id([userId, userRoleId])
+  @@index([userId], map: "IDX_7283710ea40464575a32cbbc2b")
+  @@index([userRoleId], map: "IDX_dee686d373e92c6414114a1a51")
+}

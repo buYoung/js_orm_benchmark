@@ -42,7 +42,11 @@ import { file as sequelizeFile } from 'src/models/file';
 import { fileInfo as sequelizeFileInfo } from 'src/models/fileInfo';
 import { contact as sequelizeContact } from 'src/models/contact';
 import { comment as sequelizeComment } from 'src/models/comment';
-import { userUserRolesUserRole as sequelizeUserUserRolesUserRole} from 'src/models';
+import { userUserRolesUserRole as sequelizeUserUserRolesUserRole } from 'src/models';
+import { KnexModule } from 'nest-knexjs';
+import { KnexModule as _KnexModule } from './knex/knex.module';
+import { PrismaModule as _PrismaModule } from 'src/utils/prisma.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
     imports: [
@@ -111,12 +115,29 @@ import { userUserRolesUserRole as sequelizeUserUserRolesUserRole} from 'src/mode
                 sequelizeFileInfo,
                 sequelizeContact,
                 sequelizeComment,
-                sequelizeUserUserRolesUserRole
+                sequelizeUserUserRolesUserRole,
             ],
+        }),
+        KnexModule.forRoot({
+            config: {
+                client: 'mysql2',
+                useNullAsDefault: true,
+                connection: {
+                    host: 'localhost',
+                    port: 3307,
+                    database: 'orm_benchMark',
+                    user: 'admin',
+                    password: 'admin1234',
+                    ssl: false,
+                },
+            },
         }),
         TypeORMModule,
         _MikroOrmModule,
         _SequelizeModule,
+        _KnexModule,
+        _PrismaModule,
+        PrismaModule,
     ],
     controllers: [AppController],
     providers: [AppService],
