@@ -29,6 +29,20 @@ import { File as mikroFile } from 'src/mikro-entity/File';
 import { FileInfo as mikroFileInfo } from 'src/mikro-entity/FileInfo';
 import { Contact as mikroContact } from 'src/mikro-entity/Contact';
 import { Comment as mikroComment } from 'src/mikro-entity/Comment';
+import { SequelizeModule as _SequelizeModule } from './sequelize/sequelize.module';
+import { SequelizeModule } from '@nestjs/sequelize';
+
+import { user as sequelizeUser } from 'src/models/user';
+import { userLoginHistory as sequelizeUserLoginHistory } from 'src/models/userLoginHistory';
+import { userPreferences as sequelizeUserPreferences } from 'src/models/userPreferences';
+import { userRole as sequelizeUserRole } from 'src/models/userRole';
+import { project as sequelizeProject } from 'src/models/project';
+import { profile as sequelizeProfile } from 'src/models/profile';
+import { file as sequelizeFile } from 'src/models/file';
+import { fileInfo as sequelizeFileInfo } from 'src/models/fileInfo';
+import { contact as sequelizeContact } from 'src/models/contact';
+import { comment as sequelizeComment } from 'src/models/comment';
+import { userUserRolesUserRole as sequelizeUserUserRolesUserRole} from 'src/models';
 
 @Module({
     imports: [
@@ -39,7 +53,7 @@ import { Comment as mikroComment } from 'src/mikro-entity/Comment';
             username: 'admin',
             password: 'admin1234',
             database: 'orm_benchMark',
-            logger: new TypeORMLogger,
+            logger: new TypeORMLogger(),
             logging: false,
             entities: [
                 User,
@@ -78,8 +92,31 @@ import { Comment as mikroComment } from 'src/mikro-entity/Comment';
             driver: MySqlDriver,
             port: 3307,
         }),
+        SequelizeModule.forRoot({
+            dialect: 'mysql',
+            host: 'localhost',
+            port: 3307,
+            username: 'admin',
+            password: 'admin1234',
+            database: 'orm_benchMark',
+            synchronize: false,
+            models: [
+                sequelizeUser,
+                sequelizeUserLoginHistory,
+                sequelizeUserPreferences,
+                sequelizeUserRole,
+                sequelizeProject,
+                sequelizeProfile,
+                sequelizeFile,
+                sequelizeFileInfo,
+                sequelizeContact,
+                sequelizeComment,
+                sequelizeUserUserRolesUserRole
+            ],
+        }),
         TypeORMModule,
         _MikroOrmModule,
+        _SequelizeModule,
     ],
     controllers: [AppController],
     providers: [AppService],

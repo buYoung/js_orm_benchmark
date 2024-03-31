@@ -97,7 +97,7 @@ export class TypeORMService {
     }
 
     async findAllGetManyPaginate() {
-        const qb =  this.userRepository
+        const qb = this.userRepository
             .createQueryBuilder('user')
             .setFindOptions({
                 relationLoadStrategy: 'query',
@@ -130,83 +130,32 @@ export class TypeORMService {
     }
 
     async findAllGetManyAndCountPaginate() {
-        // this.userRepository
-        //             .createQueryBuilder('user')
-        //             .leftJoinAndSelect('user.profile', 'profile')
-        //             .leftJoinAndSelect('user.userPreferences', 'userPreferences')
-        //             .leftJoinAndSelect('user.userRoles', 'userRoles')
-        //             .leftJoinAndSelect('user.contacts', 'contacts')
-        //             .leftJoinAndSelect('user.projects', 'projects')
-        //             .leftJoinAndSelect('user.userLoginHistory', 'userLoginHistory')
-        //             .leftJoinAndSelect('user.comments', 'comments')
-        //             .leftJoinAndSelect('comments.file', 'file')
-        //             .leftJoinAndSelect('file.fileInfo', 'fileInfo')
-        //             .select([
-        //                 'user.id',
-        //                 'profile.id',
-        //                 'userPreferences.id',
-        //                 'userRoles.id',
-        //                 'contacts.id',
-        //                 'projects.id',
-        //                 'userLoginHistory.id',
-        //                 'comments.id',
-        //                 'file.id',
-        //                 'fileInfo.id',
-        //             ])
-        //             .skip(0)
-        //             .take(100)
-        //             .getManyAndCount();
-        return this.userRepository.findAndCount({
-            relations: {
-                profile: true,
-                userPreferences: true,
-                userRoles: true,
-                contacts: true,
-                projects: true,
-                userLoginHistory: true,
-                comments: {
-                    file: {
-                        fileInfo: true,
-                    },
-                }
-            },
-            select: {
-                id: true,
-                profile: {
-                    id: true,
-                },
-                userPreferences: {
-                    id: true,
-                },
-                userRoles: {
-                    id: true,
-                },
-                contacts: {
-                    id: true,
-                },
-                projects: {
-                    id: true,
-                },
-                userLoginHistory: {
-                    id: true,
-                },
-                comments: {
-                    id: true,
-                    file: {
-                        id: true,
-                        fileInfo: {
-                            id: true,
-                        },
-                    },
-                },
-            },
-            skip: 0,
-            take: 100,
-            relationLoadStrategy: 'query',
-            where: {
-                id: In(Array.from({ length: 1000 }, (_, i) => 1993 + i + 1)),
-            }
-        })
+        return this.userRepository
+            .createQueryBuilder('user')
+            .leftJoinAndSelect('user.profile', 'profile')
+            .leftJoinAndSelect('user.userPreferences', 'userPreferences')
+            .leftJoinAndSelect('user.userRoles', 'userRoles')
+            .leftJoinAndSelect('user.contacts', 'contacts')
+            .leftJoinAndSelect('user.projects', 'projects')
+            .leftJoinAndSelect('user.userLoginHistory', 'userLoginHistory')
+            .leftJoinAndSelect('user.comments', 'comments')
+            .leftJoinAndSelect('comments.file', 'file')
+            .leftJoinAndSelect('file.fileInfo', 'fileInfo')
+            .select([
+                'user.id',
+                'profile.id',
+                'userPreferences.id',
+                'userRoles.id',
+                'contacts.id',
+                'projects.id',
+                'userLoginHistory.id',
+                'comments.id',
+                'file.id',
+                'fileInfo.id',
+            ])
+            .skip(0)
+            .take(100)
+            .getManyAndCount();
     }
 
     findOne(id: number) {
@@ -215,10 +164,9 @@ export class TypeORMService {
 
     async create() {
         const loopCount = 1000;
-        const queryRunner = this.connection.createQueryRunner()
+        const queryRunner = this.connection.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
-
 
         console.time('create');
         for (let i = 0; i < loopCount; i++) {
@@ -237,46 +185,37 @@ export class TypeORMService {
                 roleName: faker.person.jobType(),
             });
 
-            const contacts = Array.from(
-                { length: 5 },
-                () => {
-                    return this.contactRepository.create({
-                        phone: faker.phone.number(),
-                        address: faker.location.streetAddress(),
-                    });
-                },
-            );
+            const contacts = Array.from({ length: 5 }, () => {
+                return this.contactRepository.create({
+                    phone: faker.phone.number(),
+                    address: faker.location.streetAddress(),
+                });
+            });
 
-            const projects = Array.from(
-                { length: 10 },
-                () => {
-                    return this.projectRepository.create({
-                        projectName: faker.company.name(),
-                        projectDescription: faker.company.catchPhrase(),
-                        projectStartDate: dayjs(
-                            faker.date.anytime().getUTCDate(),
-                        ).toDate(),
-                        projectEndDate: dayjs(
-                            faker.date.future().getUTCDate(),
-                        ).toDate(),
-                    });
-                },
-            );
+            const projects = Array.from({ length: 10 }, () => {
+                return this.projectRepository.create({
+                    projectName: faker.company.name(),
+                    projectDescription: faker.company.catchPhrase(),
+                    projectStartDate: dayjs(
+                        faker.date.anytime().getUTCDate(),
+                    ).toDate(),
+                    projectEndDate: dayjs(
+                        faker.date.future().getUTCDate(),
+                    ).toDate(),
+                });
+            });
 
-            const loginHistory = Array.from(
-                { length: 5 },
-                () => {
-                    return this.userLoginHistoryRepository.create({
-                        firstName: faker.person.firstName(),
-                        lastName: faker.person.lastName(),
-                        age: faker.number.int(100),
-                        email: faker.internet.email(),
-                        lastLogin: dayjs(
-                            faker.date.anytime().getUTCDate(),
-                        ).toDate(),
-                    });
-                },
-            );
+            const loginHistory = Array.from({ length: 5 }, () => {
+                return this.userLoginHistoryRepository.create({
+                    firstName: faker.person.firstName(),
+                    lastName: faker.person.lastName(),
+                    age: faker.number.int(100),
+                    email: faker.internet.email(),
+                    lastLogin: dayjs(
+                        faker.date.anytime().getUTCDate(),
+                    ).toDate(),
+                });
+            });
 
             const fileInfo = this.fileInfoRepository.create({
                 size: faker.number.int({
@@ -293,20 +232,17 @@ export class TypeORMService {
                 uploadedAt: dayjs(faker.date.anytime().getUTCDate()).toDate(),
             });
 
-            const comment = Array.from(
-                { length: 15 },
-                () => {
-                    return this.commentRepository.create({
-                        comment: faker.lorem.sentence(),
-                        createdAt: dayjs(
-                            faker.date.anytime().getUTCDate(),
-                        ).toDate(),
-                        updatedAt: dayjs(
-                            faker.date.anytime().getUTCDate(),
-                        ).toDate(),
-                    });
-                },
-            );
+            const comment = Array.from({ length: 15 }, () => {
+                return this.commentRepository.create({
+                    comment: faker.lorem.sentence(),
+                    createdAt: dayjs(
+                        faker.date.anytime().getUTCDate(),
+                    ).toDate(),
+                    updatedAt: dayjs(
+                        faker.date.anytime().getUTCDate(),
+                    ).toDate(),
+                });
+            });
 
             const User = this.userRepository.create({
                 userId: faker.internet.email(),
