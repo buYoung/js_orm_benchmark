@@ -88,7 +88,7 @@ import { PrismaModule } from './prisma/prisma.module';
                 mikroComment,
             ],
             debug: true,
-            loadStrategy: 'select-in',
+            // loadStrategy: 'select-in',
             autoJoinOneToOneOwner: true,
             user: 'admin',
             password: 'admin1234',

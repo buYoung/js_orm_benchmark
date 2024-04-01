@@ -1,14 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import dayjs from 'dayjs';
-import { faker } from '@faker-js/faker';
 import { PrismaService as _PrismaService } from 'src/utils/prisma.service';
-import { Prisma } from '.prisma/client';
 
 @Injectable()
 export class PrismaService {
-    constructor(private prisma: _PrismaService) {
+    constructor(private prisma: _PrismaService) {}
 
-    }
     async findAllGetMany() {
         return this.prisma.user.findMany({
             select: {
@@ -189,11 +185,6 @@ export class PrismaService {
             select: {
                 id: true,
                 profile: {
-                    where: {
-                        id: {
-                            in: Array.from({ length: 1000 }, (_, i) => 1994 + i + 1),
-                        },
-                    },
                     select: {
                         id: true,
                     },
@@ -227,11 +218,6 @@ export class PrismaService {
                     select: {
                         id: true,
                         file: {
-                            where: {
-                                id: {
-                                    in: Array.from({ length: 1000 }, (_, i) => 1994 + i + 1),
-                                },
-                            },
                             select: {
                                 id: true,
                                 file_info: {
@@ -247,8 +233,6 @@ export class PrismaService {
         });
         const count = this.prisma.user
             .count({
-                skip: 0,
-                take: 100,
                 select: {
                     _all: true,
                 },

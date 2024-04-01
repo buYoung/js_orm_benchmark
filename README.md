@@ -1,51 +1,51 @@
-# typeORM
+# 개요
 
-## common spec
-node 20.10.0
-pnpm 8.15.3
+typeORM을 쓰다가 take, skip을 사용할 경우 n+1문제가 발생하여, 별도의 ORM을 찾게되었습니다.  
+typeORM에서 확인을 해보니 data mapping 방식이 Active Record냐 Data Mapper에 따라 성능이 달라지는 것을 확인하였습니다.         
+단, typeORM에서 sub query를 사용하려면 active record방식만 사용이 가능합니다.   
 
-## windows spec
-os : windows 11
-cpu : amd ryzen 7 5800x3d
-memory : 64GB
+사용된 ORM 목록:
+1. typeORM
+2. mikroORM
+3. sequelize
+4. prisma
+5. knex
 
-## mac spec
-cpu : M3 Pro
-memory : 36GB
+5가지중 knex는 메모리이슈(다른 orm에서 동일한 query를 사용했지만 memory 부족현상 발생)가 발생하여 추가적으로 사용하지 않았습니다.  
 
-## select a 1000 User(getMany) - findAllGetMany
+# 테스트 결과
 
-#### typeORM
-windows : 8.338s
+## typeORM (data mapper)
+1. findAllGetMany : 5.324s
+2. findAllGetManyAndCount : 5.387s
+3. findAllGetManyPaginate : 0.839s
+4. findAllGetManyAndCountPaginate : 3.189s
 
-#### mikroORM
-windows : 8.338s
+## typeORM (active record)
+1. findAllGetMany : 5.267s
+2. findAllGetManyAndCount : 5.536s
+3. findAllGetManyPaginate : 0.829s
+4. findAllGetManyAndCountPaginate : 3.230s
 
-## select a 1000 User(getManyAndCount) - findAllGetManyAndCount
+## mikroORM (data mapper)
+1. findAllGetMany : query - 3.952s, result - heap out of memory
+2. findAllGetManyAndCount : query - 3.616s, result - heap out of memory
+3. findAllGetManyPaginate : query - 0.662s, result - 10.650s
+4. findAllGetManyAndCountPaginate : query - 679s, result - 10.255s
 
-#### typeORM
-windows : 8.339s
+## sequelize
+1. findAllGetMany : 17.957s
+2. findAllGetManyAndCount : 17.995s
+3. findAllGetManyPaginate : 1.181s
+4. findAllGetManyAndCountPaginate : 2.4s
 
-## select a 1000 User(getMany) - findAllGetManyPaginate
+## prisma
+1. findAllGetMany : 0.237s
+2. findAllGetManyAndCount : 0.219s
+3. findAllGetManyPaginate : 0.49s
+4. findAllGetManyAndCountPaginate : 0.59s
 
-#### typeORM
-windows : 13.917s
-
-## select a 1000 User(getManyAndCount) - findAllGetManyAndCountPaginate
-
-#### typeORM
-windows : 17.567s
-
-## 왜 typeORM에서 paginate를 쓸때 더느린가? 
-
-주의: relationLoadStrategy가 기본값(사용을 안했거나)이거나, relationLoadStrategy가 'join'일때 입니다.
-typeORM에서는 paginate를할때 join을 하게되면 정확한 데이터를 얻기위해 설계된 페이지네이션 쿼리입니다.
-1차 쿼리 : where절을 사용하고 사용된 조인을 그대로 씁니다.
-2차 쿼리 : 1차쿼리에서 나온 id값으로 다시 조인을 합니다.
-
-로그를 확인해보면 실제로 2개의 쿼리로 나뉜걸 확인 가능합니다.
-
-## 해결방법은 ?
+## typeORM에서 pgination을 join과 함께 사용하려면
 
 1. relationLoadStrategy을 'select'로 바꾼다
    1. querybuilder로 사용시 findOptions에서 설정이 가능하지만, join을 findOptions에서 설정해야한다. 즉, 이렇게 할 경우 subquery를 사용할 수 없다.

@@ -42,6 +42,49 @@ export class TypeORMController {
         return result;
     }
 
+    @Get('/findAllGetManyAndCountPaginateCustom')
+    async findAllGetManyAndCountPaginateTEST() {
+        console.time('findAllGetManyAndCountPaginate');
+        const result = await this.userService.findAllGetManyAndCountPaginateTest();
+        console.timeEnd('findAllGetManyAndCountPaginate');
+        return result;
+    }
+
+    @Get('/active-record/findAllGetMany')
+    async findAllGetManyForActiveRecord() {
+        console.time('findAllGetManyForActiveRecord');
+        const result = await this.userService.findAllGetManyForActiveRecord();
+        console.timeEnd('findAllGetManyForActiveRecord');
+        return result;
+    }
+
+    @Get('/active-record/findAllGetManyAndCount')
+    async findAllGetManyAndCountForActiveRecord() {
+        console.time('findAllGetManyAndCountForActiveRecord');
+        const result =
+            await this.userService.findAllGetManyAndCountForActiveRecord();
+        console.timeEnd('findAllGetManyAndCountForActiveRecord');
+        return result;
+    }
+
+    @Get('/active-record/findAllGetManyPaginate')
+    async findAllGetManyPaginateForActiveRecord() {
+        console.time('findAllGetManyPaginate');
+        const result =
+            await this.userService.findAllGetManyPaginateForActiveRecord();
+        console.timeEnd('findAllGetManyPaginate');
+        return result;
+    }
+
+    @Get('/active-record/findAllGetManyAndCountPaginate')
+    async findAllGetManyAndCountPaginateForActiveRecord() {
+        console.time('findAllGetManyAndCountPaginateForActiveRecord');
+        const result =
+            await this.userService.findAllGetManyAndCountPaginateForActiveRecord();
+        console.timeEnd('findAllGetManyAndCountPaginateForActiveRecord');
+        return result;
+    }
+
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.userService.findOne(+id);

@@ -14,7 +14,6 @@ import { FileInfo } from 'src/mikro-entity/FileInfo';
 import { Contact } from 'src/mikro-entity/Contact';
 import { Comment } from 'src/mikro-entity/Comment';
 import { EntityManager } from '@mikro-orm/core';
-import { In } from 'typeorm';
 
 @Injectable()
 export class MikroOrmService {
@@ -97,7 +96,7 @@ export class MikroOrmService {
     }
 
     async findAllGetManyPaginate() {
-        return this.userRepository.findAll( {
+        return this.userRepository.findAll({
             populate: [
                 'profile',
                 'userPreferences',
@@ -122,40 +121,43 @@ export class MikroOrmService {
             ],
             limit: 100,
             offset: 0,
-            strategy: 'joined'
         });
     }
 
     async findAllGetManyAndCountPaginate() {
-
-        return this.userRepository.findAndCount({
-            id: {$in: Array.from({ length: 1000 }, (_, i) => 1993 + i + 1)},
-        }, {
-            populate: [
-                'profile',
-                'userPreferences',
-                'userRolesUserRole',
-                'contacts',
-                'projects',
-                'userLoginHistory',
-                'comments',
-                'comments.files',
-                'comments.files.fileInfos',
-            ],
-            fields: [
-                'id',
-                'userPreferences.id',
-                'userRolesUserRole.id',
-                'contacts.id',
-                'projects.id',
-                'userLoginHistory.id',
-                'comments.id',
-                'comments.files.id',
-                'comments.files.fileInfos.id',
-            ],
-            limit: 100,
-            offset: 0,
-        });
+        return this.userRepository.findAndCount(
+            {
+                id: { $gt: 250 },
+            },
+            {
+                populateWhere: {
+                    projects: { $gt: 250 },
+                },
+                populate: [
+                    'profile',
+                    'userPreferences',
+                    'userRolesUserRole',
+                    'contacts',
+                    'userLoginHistory',
+                    'comments',
+                    'comments.files',
+                    'comments.files.fileInfos',
+                ],
+                fields: [
+                    'id',
+                    'userPreferences.id',
+                    'userRolesUserRole.id',
+                    'contacts.id',
+                    'projects.id',
+                    'userLoginHistory.id',
+                    'comments.id',
+                    'comments.files.id',
+                    'comments.files.fileInfos.id',
+                ],
+                limit: 100,
+                offset: 250,
+            },
+        );
     }
 
     findOne(id: number) {

@@ -70,7 +70,7 @@ export class TypeORMService {
     }
 
     async findAllGetManyAndCount() {
-        return await this.userRepository
+        return this.userRepository
             .createQueryBuilder('user')
             .leftJoinAndSelect('user.profile', 'profile')
             .leftJoinAndSelect('user.userPreferences', 'userPreferences')
@@ -156,6 +156,165 @@ export class TypeORMService {
             .skip(0)
             .take(100)
             .getManyAndCount();
+    }
+
+    async findAllGetManyAndCountPaginateTest() {
+        return this.userRepository
+            .createQueryBuilder('user1')
+            .leftJoinAndSelect('user1.profile', 'profile')
+            .leftJoinAndSelect('user1.userPreferences', 'userPreferences')
+            .leftJoinAndSelect('user1.userRoles', 'userRoles')
+            .leftJoinAndSelect('user1.contacts', 'contacts')
+            .leftJoinAndSelect('user1.projects', 'projects')
+            .leftJoinAndSelect('user1.userLoginHistory', 'userLoginHistory')
+            .leftJoinAndSelect('user1.comments', 'comments')
+            .leftJoinAndSelect('comments.file', 'file')
+            .leftJoinAndSelect('file.fileInfo', 'fileInfo')
+            .select([
+                'user1.id',
+                'profile.id',
+                'userPreferences.id',
+                'userRoles.id',
+                'contacts.id',
+                'projects.id',
+                'userLoginHistory.id',
+                'comments.id',
+                'file.id',
+                'fileInfo.id',
+            ])
+            .from((qb) => {
+                return qb
+                    .select([
+                        'user.id',
+                        'user.profileId',
+                        'user.userPreferencesId',
+                    ])
+                    .from(User, 'user')
+                    .where('user.id >= :id', { id: 250 })
+                    .limit(100)
+                    .offset(150);
+            }, 'user')
+            .getQuery();
+    }
+
+    async findAllGetManyForActiveRecord() {
+        return this.userRepository.find({
+            relations: [
+                'profile',
+                'userPreferences',
+                'userRoles',
+                'contacts',
+                'projects',
+                'userLoginHistory',
+                'comments',
+                'comments.file',
+                'comments.file.fileInfo',
+            ],
+            select: {
+                id: true,
+                profile: { id: true },
+                userPreferences: { id: true },
+                userRoles: { id: true },
+                contacts: { id: true },
+                projects: { id: true },
+                userLoginHistory: { id: true },
+                comments: {
+                    id: true,
+                    file: { id: true, fileInfo: { id: true } },
+                },
+            },
+        });
+    }
+
+    async findAllGetManyAndCountForActiveRecord() {
+        return this.userRepository.findAndCount({
+            relations: [
+                'profile',
+                'userPreferences',
+                'userRoles',
+                'contacts',
+                'projects',
+                'userLoginHistory',
+                'comments',
+                'comments.file',
+                'comments.file.fileInfo',
+            ],
+            select: {
+                id: true,
+                profile: { id: true },
+                userPreferences: { id: true },
+                userRoles: { id: true },
+                contacts: { id: true },
+                projects: { id: true },
+                userLoginHistory: { id: true },
+                comments: {
+                    id: true,
+                    file: { id: true, fileInfo: { id: true } },
+                },
+            },
+        });
+    }
+
+    async findAllGetManyPaginateForActiveRecord() {
+        return this.userRepository.find({
+            relations: [
+                'profile',
+                'userPreferences',
+                'userRoles',
+                'contacts',
+                'projects',
+                'userLoginHistory',
+                'comments',
+                'comments.file',
+                'comments.file.fileInfo',
+            ],
+            select: {
+                id: true,
+                profile: { id: true },
+                userPreferences: { id: true },
+                userRoles: { id: true },
+                contacts: { id: true },
+                projects: { id: true },
+                userLoginHistory: { id: true },
+                comments: {
+                    id: true,
+                    file: { id: true, fileInfo: { id: true } },
+                },
+            },
+            skip: 0,
+            take: 100,
+        });
+    }
+
+    async findAllGetManyAndCountPaginateForActiveRecord() {
+        return this.userRepository.findAndCount({
+            relations: [
+                'profile',
+                'userPreferences',
+                'userRoles',
+                'contacts',
+                'projects',
+                'userLoginHistory',
+                'comments',
+                'comments.file',
+                'comments.file.fileInfo',
+            ],
+            select: {
+                id: true,
+                profile: { id: true },
+                userPreferences: { id: true },
+                userRoles: { id: true },
+                contacts: { id: true },
+                projects: { id: true },
+                userLoginHistory: { id: true },
+                comments: {
+                    id: true,
+                    file: { id: true, fileInfo: { id: true } },
+                },
+            },
+            skip: 0,
+            take: 100,
+        });
     }
 
     findOne(id: number) {

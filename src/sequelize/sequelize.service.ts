@@ -11,6 +11,7 @@ import { file } from 'src/models/file';
 import { fileInfo } from 'src/models/fileInfo';
 import { contact } from 'src/models/contact';
 import { comment } from 'src/models/comment';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class SequelizeService {
@@ -262,8 +263,15 @@ export class SequelizeService {
                     ],
                 },
             ],
+            where: {
+                id: {
+                    [Op.gt]: 250,
+                }
+            },
             attributes: ['id'],
+            distinct: true,
             limit: 100,
+            offset: 250,
         });
     }
 
