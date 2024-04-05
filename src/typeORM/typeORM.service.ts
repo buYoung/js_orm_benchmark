@@ -159,6 +159,29 @@ export class TypeORMService {
     }
 
     async findAllGetManyAndCountPaginateTest() {
+        const qb = this.userRepository
+            .createQueryBuilder('user1')
+            .select('user.id')
+            .leftJoin('user1.profile', 'profile')
+            .leftJoin('user1.userPreferences', 'userPreferences')
+            .leftJoin('user1.userRoles', 'userRoles')
+            .leftJoin('user1.contacts', 'contacts')
+            .leftJoin('user1.projects', 'projects')
+            .leftJoin('user1.userLoginHistory', 'userLoginHistory')
+            .leftJoin('user1.comments', 'comments')
+            .leftJoin('comments.file', 'file')
+            .leftJoin('file.fileInfo', 'fileInfo')
+            .distinct(true)
+            .where('user.id >= :id')
+            .limit(100)
+            .offset(150)
+            .getQuery();
+
+        const qb2 = this.userRepository
+            .createQueryBuilder('user1')
+            .select(`(${qb}) as user1`)
+            .getQuery();
+
         return this.userRepository
             .createQueryBuilder('user1')
             .leftJoinAndSelect('user1.profile', 'profile')
@@ -182,18 +205,8 @@ export class TypeORMService {
                 'file.id',
                 'fileInfo.id',
             ])
-            .from((qb) => {
-                return qb
-                    .select([
-                        'user.id',
-                        'user.profileId',
-                        'user.userPreferencesId',
-                    ])
-                    .from(User, 'user')
-                    .where('user.id >= :id', { id: 250 })
-                    .limit(100)
-                    .offset(150);
-            }, 'user')
+            .where(`user1.id IN (${qb2})`)
+            .setParameter('id', 100)
             .getQuery();
     }
 
