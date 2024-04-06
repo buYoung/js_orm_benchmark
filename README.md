@@ -18,7 +18,7 @@ typeORM에서 확인을 해보니 data mapping 방식이 Active Record냐 Data M
 ## typeORM (data mapper)
 1. findAllGetMany : 5.324s
 2. findAllGetManyAndCount : 5.387s
-3. findAllGetManyPaginate : 0.839s
+3. findAllGetManyPaginate : 1.439s
 4. findAllGetManyAndCountPaginate : 3.189s
 
 ## typeORM (active record)
