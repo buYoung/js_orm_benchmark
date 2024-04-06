@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import dayjs from 'dayjs';
+import { format } from 'sql-formatter';
 
 import { User } from 'src/entity/User';
 import { UserLoginHistory } from 'src/entity/UserLoginHistory';
@@ -153,48 +154,51 @@ export class TypeORMService {
                 'file.id',
                 'fileInfo.id',
             ])
+            .where('user.id >= 2100')
             .skip(0)
             .take(100)
             .getManyAndCount();
     }
 
     async findAllGetManyAndCountPaginateTest() {
+        this.connection.createQueryBuilder();
         const qb = this.userRepository
-            .createQueryBuilder('user1')
-            .select('user.id')
-            .leftJoin('user1.profile', 'profile')
-            .leftJoin('user1.userPreferences', 'userPreferences')
-            .leftJoin('user1.userRoles', 'userRoles')
-            .leftJoin('user1.contacts', 'contacts')
-            .leftJoin('user1.projects', 'projects')
-            .leftJoin('user1.userLoginHistory', 'userLoginHistory')
-            .leftJoin('user1.comments', 'comments')
+            .createQueryBuilder('user')
+            .select('user.id as user_id')
+            .leftJoin('user.profile', 'profile')
+            .leftJoin('user.userPreferences', 'userPreferences')
+            .leftJoin('user.userRoles', 'userRoles')
+            .leftJoin('user.contacts', 'contacts')
+            .leftJoin('user.projects', 'projects')
+            .leftJoin('user.userLoginHistory', 'userLoginHistory')
+            .leftJoin('user.comments', 'comments')
             .leftJoin('comments.file', 'file')
             .leftJoin('file.fileInfo', 'fileInfo')
-            .distinct(true)
-            .where('user.id >= :id')
+            .where('user.id >= 2100')
             .limit(100)
             .offset(150)
+            .groupBy('user.id')
             .getQuery();
 
-        const qb2 = this.userRepository
-            .createQueryBuilder('user1')
-            .select(`(${qb}) as user1`)
+        const qb2 = this.connection
+            .createQueryBuilder()
+            .select('user_id')
+            .from(`(${qb})`, 'user.id')
             .getQuery();
 
-        return this.userRepository
-            .createQueryBuilder('user1')
-            .leftJoinAndSelect('user1.profile', 'profile')
-            .leftJoinAndSelect('user1.userPreferences', 'userPreferences')
-            .leftJoinAndSelect('user1.userRoles', 'userRoles')
-            .leftJoinAndSelect('user1.contacts', 'contacts')
-            .leftJoinAndSelect('user1.projects', 'projects')
-            .leftJoinAndSelect('user1.userLoginHistory', 'userLoginHistory')
-            .leftJoinAndSelect('user1.comments', 'comments')
+        const query = this.userRepository
+            .createQueryBuilder('user')
+            .leftJoinAndSelect('user.profile', 'profile')
+            .leftJoinAndSelect('user.userPreferences', 'userPreferences')
+            .leftJoinAndSelect('user.userRoles', 'userRoles')
+            .leftJoinAndSelect('user.contacts', 'contacts')
+            .leftJoinAndSelect('user.projects', 'projects')
+            .leftJoinAndSelect('user.userLoginHistory', 'userLoginHistory')
+            .leftJoinAndSelect('user.comments', 'comments')
             .leftJoinAndSelect('comments.file', 'file')
             .leftJoinAndSelect('file.fileInfo', 'fileInfo')
             .select([
-                'user1.id',
+                'user.id',
                 'profile.id',
                 'userPreferences.id',
                 'userRoles.id',
@@ -205,9 +209,36 @@ export class TypeORMService {
                 'file.id',
                 'fileInfo.id',
             ])
-            .where(`user1.id IN (${qb2})`)
-            .setParameter('id', 100)
-            .getQuery();
+            .where(`user.id IN (${qb2})`)
+            .setParameter('id', 100);
+
+        const countQuery = this.userRepository
+            .createQueryBuilder('user')
+            .select('COUNT(user.id)', 'count')
+            .where(`user.id IN (${qb2})`)
+            .setParameter('id', 100);
+
+        console.log(
+            format(query.getQuery(), {
+                language: 'mysql',
+                tabWidth: 2,
+                keywordCase: 'upper',
+                linesBetweenQueries: 2,
+            }),
+        );
+        console.log(
+            format(countQuery.getQuery(), {
+                language: 'mysql',
+                tabWidth: 2,
+                keywordCase: 'upper',
+                linesBetweenQueries: 2,
+            }),
+        );
+
+        return Promise.all([
+            query.getMany(),
+            countQuery.getRawOne().then((r) => parseInt(r.count)),
+        ]);
     }
 
     async findAllGetManyForActiveRecord() {
