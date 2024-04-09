@@ -1,0 +1,530 @@
+{
+	"info": {
+		"_postman_id": "b6c18376-68eb-4120-bca3-41b01204e5b3",
+		"name": "js_orm_benchmark",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6457932"
+	},
+	"item": [
+		{
+			"name": "typeORM",
+			"item": [
+				{
+					"name": "create 1000 User Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/typeORM/test",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"typeORM",
+								"test"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getMany",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/typeORM/findAllGetMany",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"typeORM",
+								"findAllGetMany"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getManyAndCount",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/typeORM/findAllGetMany",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"typeORM",
+								"findAllGetMany"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findAllGetManyPaginate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/typeORM/findAllGetManyPaginate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"typeORM",
+								"findAllGetManyPaginate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findAllGetManyAndCountPaginate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/typeORM/findAllGetManyAndCountPaginate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"typeORM",
+								"findAllGetManyAndCountPaginate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findAllGetManyAndCountPaginate custome",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/typeORM/findAllGetManyAndCountPaginateCustom",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"typeORM",
+								"findAllGetManyAndCountPaginateCustom"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "mikroORM",
+			"item": [
+				{
+					"name": "create 1000 User Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/mikro-orm/test",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"mikro-orm",
+								"test"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getMany",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/mikro-orm/findAllGetMany",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"mikro-orm",
+								"findAllGetMany"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getManyAndCount",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/mikro-orm/findAllGetMany",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"mikro-orm",
+								"findAllGetMany"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findAllGetManyPaginate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/mikro-orm/findAllGetManyPaginate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"mikro-orm",
+								"findAllGetManyPaginate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findAllGetManyAndCountPaginate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/mikro-orm/findAllGetManyAndCountPaginate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"mikro-orm",
+								"findAllGetManyAndCountPaginate"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "sequelize",
+			"item": [
+				{
+					"name": "create 1000 User Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/mikro-orm/test",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"mikro-orm",
+								"test"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getMany",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/sequelize/findAllGetMany",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"sequelize",
+								"findAllGetMany"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getManyAndCount",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/sequelize/findAllGetMany",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"sequelize",
+								"findAllGetMany"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findAllGetManyPaginate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/sequelize/findAllGetManyPaginate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"sequelize",
+								"findAllGetManyPaginate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findAllGetManyAndCountPaginate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/sequelize/findAllGetManyAndCountPaginate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"sequelize",
+								"findAllGetManyAndCountPaginate"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "knex",
+			"item": [
+				{
+					"name": "create 1000 User Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/knex/test",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"knex",
+								"test"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getMany",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/knex/findAllGetMany",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"knex",
+								"findAllGetMany"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getManyAndCount",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/knex/findAllGetMany",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"knex",
+								"findAllGetMany"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findAllGetManyPaginate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/knex/findAllGetManyPaginate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"knex",
+								"findAllGetManyPaginate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findAllGetManyAndCountPaginate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/knex/findAllGetManyAndCountPaginate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"knex",
+								"findAllGetManyAndCountPaginate"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "prisma",
+			"item": [
+				{
+					"name": "create 1000 User Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/knex/test",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"knex",
+								"test"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getMany",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/prisma/findAllGetMany",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"prisma",
+								"findAllGetMany"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getManyAndCount",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/prisma/findAllGetManyAndCount",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"prisma",
+								"findAllGetManyAndCount"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findAllGetManyPaginate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/prisma/findAllGetManyPaginate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"prisma",
+								"findAllGetManyPaginate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findAllGetManyAndCountPaginate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/prisma/findAllGetManyAndCountPaginate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"prisma",
+								"findAllGetManyAndCountPaginate"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://127.0.0.1:3000",
+			"type": "string"
+		}
+	]
+}

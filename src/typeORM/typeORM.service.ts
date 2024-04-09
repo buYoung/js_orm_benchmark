@@ -241,7 +241,7 @@ export class TypeORMService {
         ]);
     }
 
-    async findAllGetManyForActiveRecord() {
+    async findAllGetManyForOrm() {
         return this.userRepository.find({
             relations: [
                 'profile',
@@ -270,7 +270,7 @@ export class TypeORMService {
         });
     }
 
-    async findAllGetManyAndCountForActiveRecord() {
+    async findAllGetManyAndCountForOrm() {
         return this.userRepository.findAndCount({
             relations: [
                 'profile',
@@ -299,7 +299,7 @@ export class TypeORMService {
         });
     }
 
-    async findAllGetManyPaginateForActiveRecord() {
+    async findAllGetManyPaginateForOrm() {
         return this.userRepository.find({
             relations: [
                 'profile',
@@ -330,7 +330,7 @@ export class TypeORMService {
         });
     }
 
-    async findAllGetManyAndCountPaginateForActiveRecord() {
+    async findAllGetManyAndCountPaginateForOrm() {
         return this.userRepository.findAndCount({
             relations: [
                 'profile',

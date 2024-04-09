@@ -50,38 +50,38 @@ export class TypeORMController {
         return result;
     }
 
-    @Get('/active-record/findAllGetMany')
-    async findAllGetManyForActiveRecord() {
-        console.time('findAllGetManyForActiveRecord');
-        const result = await this.userService.findAllGetManyForActiveRecord();
-        console.timeEnd('findAllGetManyForActiveRecord');
+    @Get('/orm/findAllGetMany')
+    async findAllGetManyForOrm() {
+        console.time('findAllGetManyForOrm');
+        const result = await this.userService.findAllGetManyForOrm();
+        console.timeEnd('findAllGetManyForOrm');
         return result;
     }
 
-    @Get('/active-record/findAllGetManyAndCount')
-    async findAllGetManyAndCountForActiveRecord() {
-        console.time('findAllGetManyAndCountForActiveRecord');
+    @Get('/orm/findAllGetManyAndCount')
+    async findAllGetManyAndCountForOrm() {
+        console.time('findAllGetManyAndCountForOrm');
         const result =
-            await this.userService.findAllGetManyAndCountForActiveRecord();
-        console.timeEnd('findAllGetManyAndCountForActiveRecord');
+            await this.userService.findAllGetManyAndCountForOrm();
+        console.timeEnd('findAllGetManyAndCountForOrm');
         return result;
     }
 
-    @Get('/active-record/findAllGetManyPaginate')
-    async findAllGetManyPaginateForActiveRecord() {
+    @Get('/orm/findAllGetManyPaginate')
+    async findAllGetManyPaginateForOrm() {
         console.time('findAllGetManyPaginate');
         const result =
-            await this.userService.findAllGetManyPaginateForActiveRecord();
+            await this.userService.findAllGetManyPaginateForOrm();
         console.timeEnd('findAllGetManyPaginate');
         return result;
     }
 
-    @Get('/active-record/findAllGetManyAndCountPaginate')
-    async findAllGetManyAndCountPaginateForActiveRecord() {
-        console.time('findAllGetManyAndCountPaginateForActiveRecord');
+    @Get('/orm/findAllGetManyAndCountPaginate')
+    async findAllGetManyAndCountPaginateForOrm() {
+        console.time('findAllGetManyAndCountPaginateForOrm');
         const result =
-            await this.userService.findAllGetManyAndCountPaginateForActiveRecord();
-        console.timeEnd('findAllGetManyAndCountPaginateForActiveRecord');
+            await this.userService.findAllGetManyAndCountPaginateForOrm();
+        console.timeEnd('findAllGetManyAndCountPaginateForOrm');
         return result;
     }
 

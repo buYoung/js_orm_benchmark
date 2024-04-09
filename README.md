@@ -37,13 +37,13 @@ typeORM을 쓰다가 take, skip을 사용할 경우 n+1문제가 발생하여, �
 3. findAllGetManyPaginate : query - 0.662s, result - 10.650s
 4. findAllGetManyAndCountPaginate : query - 679s, result - 10.255s
 
-## sequelize ORM
+## sequelize (ORM)
 1. findAllGetMany : 17.957s
 2. findAllGetManyAndCount : 17.995s
 3. findAllGetManyPaginate : 1.181s
 4. findAllGetManyAndCountPaginate : 2.4s
 
-## prisma ORM
+## prisma (ORM)
 1. findAllGetMany : 0.237s
 2. findAllGetManyAndCount : 0.219s
 3. findAllGetManyPaginate : 0.49s
@@ -51,7 +51,7 @@ typeORM을 쓰다가 take, skip을 사용할 경우 n+1문제가 발생하여, �
 
 ## typeORM에서 pgination을 join과 함께 사용하려면
 
-1. relationLoadStrategy을 'select'로 바꾼다
+1. relationLoadStrategy을 'select'로 바꾼다 (ORM, querybuilder 둘다 해당)
    1. querybuilder로 사용시 findOptions에서 설정이 가능하지만, join을 findOptions에서 설정해야한다. 즉, 이렇게 할 경우 subquery를 사용할 수 없다.
    2. orm방식인경우 relationLoadStrategy를 'query'로 설정해야한다.
 2. paginate를 skip, take대신 mikroORM이 구현한 where절에 select문을 한번더 사용하는 쿼리로 바꾼다. (조금 더 빨라짐.)
