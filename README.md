@@ -15,7 +15,7 @@ typeORM을 쓰다가 take, skip을 사용할 경우 n+1문제가 발생하여, �
 
 테스트는 typeORM으로 추가한 1000개의 user데이터를 기준으로 했으며, 동일한 PC에서 실행했습니다.
 
-※ 2024/04/10 active, data mapper에 대한 이해가 잘못되어 전면 수정
+※ 2024/04/10 active, data mapper에 대한 이해가 잘못되어 전면 수정 [확인](https://github.com/buYoung/js_orm_benchmark/blob/master/src/typeORM/typeORM.service.ts#L163)
 
 # 테스트 결과
 
