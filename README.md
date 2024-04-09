@@ -2,7 +2,7 @@
 
 typeORM을 쓰다가 take, skip을 사용할 경우 n+1문제가 발생하여, 별도의 ORM을 찾게되었습니다.  
 typeORM에서 확인을 해보니 data mapping 방식이 Active Record냐 Data Mapper에 따라 성능이 달라지는 것을 확인하였습니다.         
-단, typeORM에서 sub query를 사용하려면 active record방식만 사용이 가능합니다.   
+단, typeORM에서 sub query를 사용하려면 query builder방식만 사용이 가능합니다.   
 
 사용된 ORM 목록:
 1. typeORM
@@ -15,31 +15,31 @@ typeORM에서 확인을 해보니 data mapping 방식이 Active Record냐 Data M
 
 # 테스트 결과
 
-## typeORM (data mapper)
+## typeORM (ORM)
 1. findAllGetMany : 5.324s
 2. findAllGetManyAndCount : 5.387s
 3. findAllGetManyPaginate : 1.439s
 4. findAllGetManyAndCountPaginate : 3.189s
 
-## typeORM (active record)
+## typeORM (query builder)
 1. findAllGetMany : 5.267s
 2. findAllGetManyAndCount : 5.536s
-3. findAllGetManyPaginate : 0.829s
+3. findAllGetManyPaginate : 1.829s
 4. findAllGetManyAndCountPaginate : 3.230s
 
-## mikroORM (data mapper)
+## mikroORM (ORM)
 1. findAllGetMany : query - 3.952s, result - heap out of memory
 2. findAllGetManyAndCount : query - 3.616s, result - heap out of memory
 3. findAllGetManyPaginate : query - 0.662s, result - 10.650s
 4. findAllGetManyAndCountPaginate : query - 679s, result - 10.255s
 
-## sequelize
+## sequelize ORM
 1. findAllGetMany : 17.957s
 2. findAllGetManyAndCount : 17.995s
 3. findAllGetManyPaginate : 1.181s
 4. findAllGetManyAndCountPaginate : 2.4s
 
-## prisma
+## prisma ORM
 1. findAllGetMany : 0.237s
 2. findAllGetManyAndCount : 0.219s
 3. findAllGetManyPaginate : 0.49s
