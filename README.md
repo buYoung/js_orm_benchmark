@@ -1,8 +1,8 @@
 # 개요
 
-typeORM을 쓰다가 take, skip을 사용할 경우 n+1문제가 발생하여, 별도의 ORM을 찾게되었습니다.  
-typeORM에서 확인을 해보니 data mapping 방식이 Active Record냐 Data Mapper에 따라 성능이 달라지는 것을 확인하였습니다.         
-단, typeORM에서 sub query를 사용하려면 query builder방식만 사용이 가능합니다.   
+typeORM을 쓰다가 take, skip을 사용할 경우 n+1문제가 발생하여, 별도의 ORM을 찾게되었습니다.  또, 별도의 ORM을 비교후 TypeORM에서는 어떤식으로 해야 효율적으로 페이징처리를 할 수 있을지 찾아보았습니다.
+
+※ typeORM에서 확인을 해보니 take, skip을 사용하면 distinct로 ID값을 가져오는 쿼리 후 ID값을 기준으로 재 쿼리를 실행합니다. count까지 한다면 distinct가 총 2번 최상위에서 실행이 되버리죠...
 
 사용된 ORM 목록:
 1. typeORM
@@ -12,6 +12,10 @@ typeORM에서 확인을 해보니 data mapping 방식이 Active Record냐 Data M
 5. knex
 
 5가지중 knex는 메모리이슈(다른 orm에서 동일한 query를 사용했지만 memory 부족현상 발생)가 발생하여 추가적으로 사용하지 않았습니다.  
+
+테스트는 typeORM으로 추가한 1000개의 user데이터를 기준으로 했으며, 동일한 PC에서 실행했습니다.
+
+※ 2024/04/10 active, data mapper에 대한 이해가 잘못되어 전면 수정
 
 # 테스트 결과
 
