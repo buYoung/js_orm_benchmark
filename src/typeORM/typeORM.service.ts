@@ -161,7 +161,6 @@ export class TypeORMService {
     }
 
     async findAllGetManyAndCountPaginateTest() {
-        this.connection.createQueryBuilder();
         const qb = this.userRepository
             .createQueryBuilder('user')
             .select('user.id as user_id')
@@ -175,15 +174,26 @@ export class TypeORMService {
             .leftJoin('comments.file', 'file')
             .leftJoin('file.fileInfo', 'fileInfo')
             .where('user.id >= 2100')
+            .andWhere('profile.id >= 2200')
+            .andWhere('projects.id >= 26000')
+            .andWhere('comments.id >= 35000')
+            .groupBy('user.id');
+
+        const qbForCount = qb.clone();
+        qb
             .limit(100)
-            .offset(150)
-            .groupBy('user.id')
-            .getQuery();
+            .offset(150);
 
         const qb2 = this.connection
             .createQueryBuilder()
             .select('user_id')
-            .from(`(${qb})`, 'user.id')
+            .from(`(${qb.getQuery()})`, 'user.id')
+            .getQuery();
+
+        const qb2ForCount = this.connection
+            .createQueryBuilder()
+            .select('user_id')
+            .from(`(${qbForCount.getQuery()})`, 'user.id')
             .getQuery();
 
         const query = this.userRepository
@@ -209,14 +219,14 @@ export class TypeORMService {
                 'file.id',
                 'fileInfo.id',
             ])
-            .where(`user.id IN (${qb2})`)
-            .setParameter('id', 100);
+            .where(`user.id IN (${qb2})`);
 
         const countQuery = this.userRepository
             .createQueryBuilder('user')
             .select('COUNT(user.id)', 'count')
-            .where(`user.id IN (${qb2})`)
-            .setParameter('id', 100);
+            .groupBy('user.id')
+            .from(`(${qb2ForCount})`, 'user.id');
+
 
         console.log(
             format(query.getQuery(), {
@@ -228,6 +238,182 @@ export class TypeORMService {
         );
         console.log(
             format(countQuery.getQuery(), {
+                language: 'mysql',
+                tabWidth: 2,
+                keywordCase: 'upper',
+                linesBetweenQueries: 2,
+            }),
+        );
+
+        return Promise.all([
+            query.getMany(),
+            countQuery.getRawOne().then((r) => parseInt(r.count)),
+        ]);
+    }
+
+    async findAllGetManyAndCountPaginateTest2() {
+        const qb = this.userRepository
+            .createQueryBuilder('user')
+            .select('user.id as user_id')
+            .leftJoin('user.profile', 'profile')
+            .leftJoin('user.userPreferences', 'userPreferences')
+            .leftJoin('user.userRoles', 'userRoles')
+            .leftJoin('user.contacts', 'contacts')
+            .leftJoin('user.projects', 'projects')
+            .leftJoin('user.userLoginHistory', 'userLoginHistory')
+            .leftJoin('user.comments', 'comments')
+            .leftJoin('comments.file', 'file')
+            .leftJoin('file.fileInfo', 'fileInfo')
+            .where('user.id >= 2100')
+            .andWhere('profile.id >= 2200')
+            .andWhere('projects.id >= 26000')
+            .andWhere('comments.id >= 35000')
+            .groupBy('user.id')
+            .limit(100)
+            .offset(150);
+
+        const qb2 = this.connection
+            .createQueryBuilder()
+            .select('user_id')
+            .from(`(${qb.getQuery()})`, 'user.id')
+            .getQuery();
+
+        const query = this.userRepository
+            .createQueryBuilder('user')
+            .leftJoinAndSelect('user.profile', 'profile')
+            .leftJoinAndSelect('user.userPreferences', 'userPreferences')
+            .leftJoinAndSelect('user.userRoles', 'userRoles')
+            .leftJoinAndSelect('user.contacts', 'contacts')
+            .leftJoinAndSelect('user.projects', 'projects')
+            .leftJoinAndSelect('user.userLoginHistory', 'userLoginHistory')
+            .leftJoinAndSelect('user.comments', 'comments')
+            .leftJoinAndSelect('comments.file', 'file')
+            .leftJoinAndSelect('file.fileInfo', 'fileInfo')
+            .select([
+                'user.id',
+                'profile.id',
+                'userPreferences.id',
+                'userRoles.id',
+                'contacts.id',
+                'projects.id',
+                'userLoginHistory.id',
+                'comments.id',
+                'file.id',
+                'fileInfo.id',
+            ])
+            .where(`user.id IN (${qb2})`);
+
+        const countQuery = this.userRepository
+            .createQueryBuilder('user')
+            .select('COUNT(user.id)', 'count')
+            .where('user.id >= 2100')
+            .andWhereExists(
+                this.profileRepository
+                    .createQueryBuilder('profile')
+                    .select('1')
+                    .where(
+                        'profile.id >= 2200 and profile.id = user.profileId',
+                    ),
+            )
+            .andWhereExists(
+                this.commentRepository
+                    .createQueryBuilder('comment')
+                    .select('1')
+                    .where(
+                        'comment.id >= 35000 and comment.userId = user.id',
+                    ),
+            )
+            .andWhereExists(
+                this.projectRepository
+                    .createQueryBuilder('project')
+                    .select('1')
+                    .where(
+                        'project.id >= 26000 and project.userId = user.id',
+                    ),
+            );
+
+
+        console.log(
+            format(query.getQuery(), {
+                language: 'mysql',
+                tabWidth: 2,
+                keywordCase: 'upper',
+                linesBetweenQueries: 2,
+            }),
+        );
+        console.log(
+            format(countQuery.getQuery(), {
+                language: 'mysql',
+                tabWidth: 2,
+                keywordCase: 'upper',
+                linesBetweenQueries: 2,
+            }),
+        );
+
+        return Promise.all([
+            query.getMany(),
+            countQuery.getRawOne().then((r) => parseInt(r.count)),
+        ]);
+    }
+
+    async findAllGetManyAndCountPaginateTest3() {
+        const qb = this.userRepository
+            .createQueryBuilder('user')
+            .select('user.id as user_id')
+
+            .where('user.id >= 2100')
+            .groupBy('user.id');
+
+        const qbForCount = qb.clone();
+
+        qb.limit(100)
+            .leftJoin('user.profile', 'profile')
+            .leftJoin('user.userPreferences', 'userPreferences')
+            .leftJoin('user.userRoles', 'userRoles')
+            .leftJoin('user.contacts', 'contacts')
+            .leftJoin('user.projects', 'projects')
+            .leftJoin('user.userLoginHistory', 'userLoginHistory')
+            .leftJoin('user.comments', 'comments')
+            .leftJoin('comments.file', 'file')
+            .leftJoin('file.fileInfo', 'fileInfo')
+            .offset(150);
+
+        const query = this.userRepository
+            .createQueryBuilder('user')
+            .leftJoinAndSelect('user.profile', 'profile')
+            .leftJoinAndSelect('user.userPreferences', 'userPreferences')
+            .leftJoinAndSelect('user.userRoles', 'userRoles')
+            .leftJoinAndSelect('user.contacts', 'contacts')
+            .leftJoinAndSelect('user.projects', 'projects')
+            .leftJoinAndSelect('user.userLoginHistory', 'userLoginHistory')
+            .leftJoinAndSelect('user.comments', 'comments')
+            .leftJoinAndSelect('comments.file', 'file')
+            .leftJoinAndSelect('file.fileInfo', 'fileInfo')
+            .addCommonTableExpression(qb, 'user_id')
+            .select([
+                'user.id',
+                'profile.id',
+                'userPreferences.id',
+                'userRoles.id',
+                'contacts.id',
+                'projects.id',
+                'userLoginHistory.id',
+                'comments.id',
+                'file.id',
+                'fileInfo.id',
+            ])
+            .where(`user.id IN (select user_id from user_id)`)
+            .setParameter('id', 100);
+
+        const countQuery = this.connection
+            .createQueryBuilder()
+            .select('COUNT(user_id.user_id)', 'count')
+            .addCommonTableExpression(qbForCount, 'user_id')
+            .from('user_id', 'user_id')
+            .setParameter('id', 100);
+
+        console.log(
+            format(query.getQuery(), {
                 language: 'mysql',
                 tabWidth: 2,
                 keywordCase: 'upper',

@@ -50,6 +50,14 @@ export class TypeORMController {
         return result;
     }
 
+    @Get('/findAllGetManyAndCountPaginateCustom2')
+    async findAllGetManyAndCountPaginateTEST2() {
+        console.time('findAllGetManyAndCountPaginate');
+        const result = await this.userService.findAllGetManyAndCountPaginateTest2();
+        console.timeEnd('findAllGetManyAndCountPaginate');
+        return result;
+    }
+
     @Get('/orm/findAllGetMany')
     async findAllGetManyForOrm() {
         console.time('findAllGetManyForOrm');
